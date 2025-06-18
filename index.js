@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const { MONGO_URI } = require('./config/keys') // 👈 Importamos la URI de Atlas
+const { MONGO_URI } = require('./config/keys') //Importamos la URI de Atlas
 
 const app = express()
 const PORT = 3000
