@@ -63,6 +63,63 @@ const PostController = {
     console.error('Error al buscar por ID:', error.message)
     res.status(500).send({ message: 'Error al buscar el post' })
   }
+},
+
+  async getPaginated(req, res) {
+  try {
+    const { page = 1, limit = 10 } = req.query
+
+    const posts = await Post.find()
+      .populate('author', 'name email')
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit))
+
+    res.send(posts)
+  } catch (error) {
+    console.error('Error en paginación:', error.message)
+    res.status(500).send({ message: 'Error al paginar los posts' })
+  }
+},
+
+  async like(req, res) {
+  try {
+    const postId = req.params.id
+    const userId = req.user._id
+
+    const post = await Post.findById(postId)
+    if (!post) return res.status(404).send({ message: 'Post no encontrado' })
+
+    // Verifica si ya dio like
+    if (post.likes.includes(userId)) {
+      return res.status(400).send({ message: 'Ya diste like a este post' })
+    }
+
+    post.likes.push(userId)
+    await post.save()
+
+    res.send({ message: 'Like añadido', post })
+  } catch (error) {
+    console.error('Error al dar like:', error.message)
+    res.status(500).send({ message: 'Error al dar like' })
+  }
+}, 
+
+  async unlike(req, res) {
+  try {
+    const postId = req.params.id
+    const userId = req.user._id
+
+    const post = await Post.findById(postId)
+    if (!post) return res.status(404).send({ message: 'Post no encontrado' })
+
+    post.likes = post.likes.filter(likeId => likeId.toString() !== userId.toString())
+    await post.save()
+
+    res.send({ message: 'Like eliminado', post })
+  } catch (error) {
+    console.error('Error al quitar like:', error.message)
+    res.status(500).send({ message: 'Error al quitar like' })
+  }
 }
 
 }
