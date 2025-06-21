@@ -1,0 +1,29 @@
+# 🛠 Node.js
+node_modules/
+package-lock.json
+
+# 🔐 Variables de entorno
+.env
+.env.local
+.env.development
+.env.production
+
+# 🐛 Archivos de errores y logs
+logs/
+*.log
+npm-debug.log*
+
+# 🧠 Configuraciones del editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 💻 Archivos de sistema (Windows, macOS)
+.DS_Store
+Thumbs.db
+
+# 🧪 Archivos temporales de pruebas
+*.test.js
+*.bak
+*~

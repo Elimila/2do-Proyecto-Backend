@@ -120,6 +120,33 @@ const PostController = {
     console.error('Error al quitar like:', error.message)
     res.status(500).send({ message: 'Error al quitar like' })
   }
+},
+
+  async update(req, res) {
+  try {
+    const { title, content, image } = req.body
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      { title, content, image },
+      { new: true }
+    )
+
+    res.send({ message: 'Post actualizado con éxito', post: updatedPost })
+  } catch (error) {
+    console.error('Error al actualizar el post:', error.message)
+    res.status(500).send({ message: 'Error al actualizar el post' })
+  }
+},
+
+  async delete(req, res) {
+  try {
+    const deletedPost = await Post.findByIdAndDelete(req.params.id)
+    res.send({ message: 'Post eliminado con éxito', post: deletedPost })
+  } catch (error) {
+    console.error('Error al eliminar el post:', error.message)
+    res.status(500).send({ message: 'Error al eliminar el post' })
+  }
 }
 
 }
