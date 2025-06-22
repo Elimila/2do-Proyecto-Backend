@@ -4,14 +4,18 @@ package-lock.json
 
 # 🔐 Variables de entorno
 .env
-.env.local
-.env.development
-.env.production
+.env.*  # incluye .env.local, .env.development, etc.
 
-# 🐛 Archivos de errores y logs
+# 🐞 Logs y errores
 logs/
 *.log
 npm-debug.log*
+
+# 🧪 Archivos de test o backups
+*.test.js
+*.spec.js
+*.bak
+*~
 
 # 🧠 Configuraciones del editor
 .vscode/
@@ -19,11 +23,7 @@ npm-debug.log*
 *.swp
 *.swo
 
-# 💻 Archivos de sistema (Windows, macOS)
+# 💻 Archivos del sistema
 .DS_Store
 Thumbs.db
 
-# 🧪 Archivos temporales de pruebas
-*.test.js
-*.bak
-*~
