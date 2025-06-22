@@ -3,9 +3,10 @@ const Post = require('../models/Post')
 const PostController = {
   async create(req, res) {
     try {
-      const { title, content, image } = req.body
+      const { title, content } = req.body
+      const image = req.file ? req.file.filename : null
+      const author = req.user._id
 
-      // Validación de campos obligatorios
       if (!title || !content) {
         return res.status(400).send({ message: 'Título y contenido son obligatorios' })
       }
@@ -14,7 +15,7 @@ const PostController = {
         title,
         content,
         image,
-        author: req.user._id
+        author
       })
 
       res.status(201).send({ message: 'Post creado con éxito', post })
