@@ -125,11 +125,15 @@ const PostController = {
 
   async update(req, res) {
   try {
-    const { title, content, image } = req.body
+    const { title, content } = req.body
+    const image = req.file ? req.file.filename : undefined
+
+    const updateFields = { title, content }
+    if (image) updateFields.image = image
 
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, content, image },
+      updateFields,
       { new: true }
     )
 

@@ -6,6 +6,7 @@ const CommentSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El comentario no puede estar vacío']
   },
+  image: String,
   author: {
     type: ObjectId,
     ref: 'User',
@@ -15,7 +16,8 @@ const CommentSchema = new mongoose.Schema({
     type: ObjectId,
     ref: 'Post',
     required: true
-  }
+  },
+  likes: [{ type: ObjectId, ref: 'User' }]
 }, { timestamps: true })
 
 const Comment = mongoose.model('Comment', CommentSchema)

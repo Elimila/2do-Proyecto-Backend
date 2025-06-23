@@ -14,7 +14,7 @@ router.get('/paginated', PostController.getPaginated)
 
 router.put('/like/:id', authentication, PostController.like)
 router.put('/unlike/:id', authentication, PostController.unlike)
-router.put('/:id', authentication, isAuthor, PostController.update)
+router.put('/:id', authentication, isAuthor, upload.single('image'), PostController.update)
 router.delete('/:id', authentication, isAuthor, PostController.delete)
 
 module.exports = router
