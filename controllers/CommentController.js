@@ -6,12 +6,13 @@ const CommentController = {
       const { text } = req.body
       const postId = req.params.postId
       const author = req.user._id
+      const image = req.file ? req.file.filename : null
 
       if (!text) {
         return res.status(400).send({ message: 'El comentario no puede estar vacío' })
       }
 
-      const comment = await Comment.create({ text, author, postId })
+      const comment = await Comment.create({ text, image, author, postId })
       res.status(201).send({ message: 'Comentario creado con éxito', comment })
     } catch (error) {
       console.error('Error al crear comentario:', error.message)
