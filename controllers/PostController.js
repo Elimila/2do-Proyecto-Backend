@@ -25,7 +25,7 @@ const PostController = {
     }
   },
 
-  async getAll(req, res) {
+async getAll(req, res) {
   try {
     const posts = await Post.find().populate('author', 'name email') // Solo muestra name y email del autor
     res.send(posts)
@@ -34,7 +34,7 @@ const PostController = {
     res.status(500).send({ message: 'Error al obtener los posts' })
   }
 },
-  async getByTitle(req, res) {
+async getByTitle(req, res) {
   try {
     const title = req.params.title
     const posts = await Post.find({
@@ -51,7 +51,7 @@ const PostController = {
     res.status(500).send({ message: 'Error al buscar posts' })
   }
 },
-  async getById(req, res) {
+async getById(req, res) {
   try {
     const post = await Post.findById(req.params.id).populate('author', 'name email')
 
@@ -66,7 +66,7 @@ const PostController = {
   }
 },
 
-  async getPaginated(req, res) {
+async getPaginated(req, res) {
   try {
     const { page = 1, limit = 10 } = req.query
 
@@ -82,7 +82,7 @@ const PostController = {
   }
 },
 
-  async like(req, res) {
+async like(req, res) {
   try {
     const postId = req.params.id
     const userId = req.user._id
@@ -105,7 +105,7 @@ const PostController = {
   }
 }, 
 
-  async unlike(req, res) {
+async unlike(req, res) {
   try {
     const postId = req.params.id
     const userId = req.user._id
@@ -123,7 +123,7 @@ const PostController = {
   }
 },
 
-  async update(req, res) {
+async update(req, res) {
   try {
     const { title, content } = req.body
     const image = req.file ? req.file.filename : undefined
@@ -144,7 +144,7 @@ const PostController = {
   }
 },
 
-  async delete(req, res) {
+async delete(req, res) {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id)
     res.send({ message: 'Post eliminado con éxito', post: deletedPost })

@@ -23,7 +23,9 @@ const UserSchema = new mongoose.Schema({
   avatar: {
   type: String,
   default: ''
-  }
+  },
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true })
 
 // Para ocultar password y tokens al responder

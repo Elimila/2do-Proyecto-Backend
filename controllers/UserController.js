@@ -9,7 +9,6 @@ const UserController = {
       const { name, email, password, age } = req.body
       const image = req.file ? req.file.filename : null
 
-      // Validar campos obligatorios
       if (!name || !email || !password) {
         return res.status(400).send({ message: 'Faltan campos obligatorios' })
       }
@@ -93,8 +92,55 @@ const UserController = {
       console.error('Error al actualizar el avatar:', error.message)
       res.status(500).send({ message: 'Error al actualizar avatar' })
     }
+  },
+
+  async follow(req, res) {
+    try {
+      const userToFollowId = req.params.id
+      const userLoggedInId = req.user._id
+
+      if (userToFollowId === userLoggedInId.toString()) {
+        return res.status(400).send({ message: 'No puedes seguirte a ti mismo' })
+      }
+
+      const user = await User.findById(userToFollowId)
+      if (!user) return res.status(404).send({ message: 'Usuario a seguir no encontrado' })
+
+      if (user.followers.includes(userLoggedInId)) {
+        return res.status(400).send({ message: 'Ya sigues a este usuario' })
+      }
+
+      user.followers.push(userLoggedInId)
+      await user.save()
+
+      res.send({ message: 'Ahora sigues a este usuario', user })
+    } catch (error) {
+      console.error('Error al seguir usuario:', error.message)
+      res.status(500).send({ message: 'Error al seguir usuario' })
+    }
+  },
+
+  async unfollow(req, res) {
+    try {
+      const userToUnfollowId = req.params.id
+      const userLoggedInId = req.user._id
+
+      const user = await User.findById(userToUnfollowId)
+      if (!user) return res.status(404).send({ message: 'Usuario a dejar de seguir no encontrado' })
+
+      user.followers = user.followers.filter(
+        followerId => followerId.toString() !== userLoggedInId.toString()
+      )
+      await user.save()
+
+      res.send({ message: 'Has dejado de seguir al usuario', user })
+    } catch (error) {
+      console.error('Error al dejar de seguir:', error.message)
+      res.status(500).send({ message: 'Error al dejar de seguir' })
+    }
   }
 }
 
 module.exports = UserController
+
 
