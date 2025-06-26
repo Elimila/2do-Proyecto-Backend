@@ -2,6 +2,7 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { jwt_secret } = require('../config/keys')
+const Post = require('../models/Post')
 
 const UserController = {
   async register(req, res) {
@@ -66,14 +67,38 @@ const UserController = {
     }
   },
 
-  async getInfo(req, res) {
-    try {
-      const user = await User.findById(req.user._id)
-      res.send(user)
-    } catch (error) {
-      console.error('Error al obtener info del usuario:', error.message)
-      res.status(500).send({ message: 'Error al obtener la información' })
+async getInfo(req, res) {
+  try {
+    const user = await User.findById(req.user._id)
+      .populate('followers', 'name email') // Muestra nombre y email de los seguidores
+      .lean(); // Convierte el documento Mongoose a objeto JavaScript
+
+    if (!user) {
+      return res.status(404).send({ message: 'Usuario no encontrado' });
     }
+
+    // Contar seguidores
+    const followerCount = user.followers.length;
+
+    // Obtener posts del usuario
+    const posts = await Post.find({ author: req.user._id });
+
+    res.send({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        age: user.age,
+        role: user.role,
+        avatar: user.avatar || null,
+        followerCount
+      },
+      posts
+    });
+  } catch (error) {
+    console.error('Error al obtener info del usuario:', error.message);
+    res.status(500).send({ message: 'Error al obtener la información' });
+  }
   },
 
   async updateAvatar(req, res) {
