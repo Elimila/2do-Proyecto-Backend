@@ -7,8 +7,9 @@ const UserController = {
   async register(req, res) {
     try {
       const { name, email, password, age } = req.body
+      const image = req.file ? req.file.filename : null
 
-      // Validar campos
+      // Validar campos obligatorios
       if (!name || !email || !password) {
         return res.status(400).send({ message: 'Faltan campos obligatorios' })
       }
@@ -21,12 +22,13 @@ const UserController = {
         password: hashedPassword,
         age,
         role: 'user',
-        tokens: []
+        tokens: [],
+        image
       })
 
       res.status(201).send({ message: 'Usuario registrado con éxito', user })
     } catch (error) {
-      console.error(error)
+      console.error('Error al registrar el usuario:', error.message)
       res.status(500).send({ message: 'Error al registrar el usuario' })
     }
   },
@@ -48,7 +50,7 @@ const UserController = {
 
       res.send({ message: `Bienvenid@ ${user.name}`, token })
     } catch (error) {
-      console.error(error)
+      console.error('Error en el login:', error.message)
       res.status(500).send({ message: 'Error en el login' })
     }
   },
@@ -60,7 +62,7 @@ const UserController = {
       })
       res.send({ message: 'Desconectado con éxito' })
     } catch (error) {
-      console.error(error)
+      console.error('Error al cerrar sesión:', error.message)
       res.status(500).send({ message: 'Error al intentar cerrar sesión' })
     }
   },
@@ -70,10 +72,29 @@ const UserController = {
       const user = await User.findById(req.user._id)
       res.send(user)
     } catch (error) {
-      console.error(error)
+      console.error('Error al obtener info del usuario:', error.message)
       res.status(500).send({ message: 'Error al obtener la información' })
+    }
+  },
+
+  async updateAvatar(req, res) {
+    try {
+      const avatar = req.file ? req.file.filename : null
+      if (!avatar) return res.status(400).send({ message: 'No se subió ninguna imagen' })
+
+      const user = await User.findByIdAndUpdate(
+        req.user._id,
+        { avatar },
+        { new: true }
+      )
+
+      res.send({ message: 'Avatar actualizado con éxito', user })
+    } catch (error) {
+      console.error('Error al actualizar el avatar:', error.message)
+      res.status(500).send({ message: 'Error al actualizar avatar' })
     }
   }
 }
 
 module.exports = UserController
+
