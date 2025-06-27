@@ -13,6 +13,8 @@ router.post('/follow/:id', authentication, UserController.follow)
 router.post('/unfollow/:id', authentication, UserController.unfollow)
 router.get('/confirm/:emailtoken', UserController.confirmEmail)
 router.get('/search/:name', UserController.getByName)
+router.get('/id/:id', UserController.getById)
+
 
 
 

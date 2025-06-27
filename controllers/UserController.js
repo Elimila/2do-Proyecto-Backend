@@ -187,7 +187,7 @@ async updateAvatar(req, res) {
     
   },
 
-  async confirmEmail(req, res) {
+async confirmEmail(req, res) {
   try {
     const user = await User.findOne({ emailtoken: req.params.emailtoken });
 
@@ -221,6 +221,17 @@ async getByName(req, res) {
   } catch (error) {
     console.error('Error al buscar usuarios por nombre:', error.message)
     res.status(500).send({ message: 'Error al buscar usuarios' })
+  }
+},
+
+async getById(req, res) {
+  try {
+    const user = await User.findById(req.params.id).select('-password -tokens')
+    if (!user) return res.status(404).send({ message: 'Usuario no encontrado' })
+    res.send(user)
+  } catch (error) {
+    console.error('Error al obtener usuario por ID:', error.message)
+    res.status(500).send({ message: 'Error al buscar usuario por ID' })
   }
 }
 
