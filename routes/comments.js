@@ -5,6 +5,7 @@ const { authentication } = require('../middlewares/authentication')
 const isCommentAuthor = require('../middlewares/isCommentAuthor')
 const upload = require('../middlewares/upload') 
 
+
 // Crear comentario en un post
 router.post('/:postId', authentication, upload.single('image'), CommentController.create)
 

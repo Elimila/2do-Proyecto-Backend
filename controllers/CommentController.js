@@ -84,7 +84,7 @@ const CommentController = {
     }
   },
 
-  async like(req, res) {
+async like(req, res) {
   try {
     const commentId = req.params.id
     const userId = req.user._id
@@ -106,7 +106,7 @@ const CommentController = {
   }
 },
 
-  async unlike(req, res) {
+async unlike(req, res) {
   try {
     const commentId = req.params.id
     const userId = req.user._id

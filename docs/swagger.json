@@ -1,0 +1,461 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Social Media API",
+    "version": "1.0.0",
+    "description": "Documentaci\u00f3n de la API del Proyecto 2 de Backend"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Registro de usuario",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "age": {
+                    "type": "integer"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado y correo enviado"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login del usuario",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login exitoso"
+          },
+          "401": {
+            "description": "Credenciales incorrectas"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logout del usuario",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sesi\u00f3n cerrada con \u00e9xito"
+          }
+        }
+      }
+    },
+    "/users/info": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Obtener info del usuario logueado",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Info del usuario"
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Actualizar avatar",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Avatar actualizado"
+          }
+        }
+      }
+    },
+    "/users/follow/{id}": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Seguir a un usuario",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ahora sigues a este usuario"
+          }
+        }
+      }
+    },
+    "/users/unfollow/{id}": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Dejar de seguir a un usuario",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Has dejado de seguir al usuario"
+          }
+        }
+      }
+    },
+    "/users/confirm/{emailtoken}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Confirmar email del usuario",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "emailtoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cuenta confirmada con \u00e9xito"
+          },
+          "400": {
+            "description": "Token inv\u00e1lido"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "post": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Crear un nuevo post",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Post creado"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Obtener todos los posts",
+        "responses": {
+          "200": {
+            "description": "Listado de posts"
+          }
+        }
+      }
+    },
+    "/posts/like/{id}": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Dar like a un post",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like a\u00f1adido"
+          }
+        }
+      }
+    },
+    "/posts/unlike/{id}": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Quitar like de un post",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like eliminado"
+          }
+        }
+      }
+    },
+    "/comments/{postId}": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Crear un comentario",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comentario creado"
+          }
+        }
+      }
+    },
+    "/comments/like/{id}": {
+      "put": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Dar like a un comentario",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like a\u00f1adido"
+          }
+        }
+      }
+    },
+    "/comments/unlike/{id}": {
+      "put": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Quitar like de un comentario",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like eliminado"
+          }
+        }
+      }
+    }
+  }
+}
