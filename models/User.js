@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema({
   type: String,
   default: ''
   },
+  emailtoken: String,
+  confirmed: {
+  type: Boolean,
+  default: false
+},
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true })
