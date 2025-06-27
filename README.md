@@ -1,120 +1,140 @@
+# 📸 Proyecto Backend - SocialMedia
 
-# 2do Proyecto Backend - Social Media API
+Este proyecto es una API RESTful desarrollada con **Node.js**, **Express**, **MongoDB** y **Mongoose**. Permite la gestión de usuarios, posts y comentarios, con funcionalidades como autenticación, likes, followers y carga de imágenes. Incluye también documentación Swagger para todos los endpoints.
 
-## 🚀 Descripción
-Este es un proyecto backend desarrollado en **Node.js** y **Express**, con base de datos en **MongoDB Atlas** usando **Mongoose**. Permite la gestión de usuarios, posts, comentarios y likes. Implementa autenticación con **JWT**, validaciones y despliegue en producción con **Render**.
+## 🚀 Tecnologías
 
----
-
-## 🛠 Tecnologías utilizadas
 - Node.js
 - Express
-- MongoDB + Mongoose
-- JWT + Bcrypt
+- MongoDB (Atlas)
+- Mongoose
+- JWT
+- Bcrypt
+- Multer
+- Nodemailer
+- Swagger (Documentación)
 - Dotenv
-- Nodemon
-- Render (producción)
-- Postman (pruebas)
+
+## 🧑‍💻 Funcionalidades principales
+
+### ✅ Autenticación y autorización
+
+- Registro de usuarios con confirmación de correo electrónico
+- Login con JWT
+- Logout (elimina el token del usuario)
+- Middleware de autenticación para rutas protegidas
+
+### 🧾 Usuarios
+
+- Registrar usuario con imagen de perfil
+- Confirmar cuenta vía email
+- Iniciar sesión (solo si el correo está confirmado)
+- Consultar datos del usuario autenticado (`/users/info`)
+- Subir/actualizar avatar
+- Seguir y dejar de seguir usuarios
+- Ver seguidores (con nombre y email)
+
+### 📝 Posts
+
+- Crear post con título, contenido e imagen
+- Obtener todos los posts con autor y comentarios
+- Buscar post por título o ID
+- Actualizar y eliminar (solo el autor)
+- Likes: dar y quitar like
+- Paginación de posts
+
+### 💬 Comentarios
+
+- Crear, editar y eliminar comentarios (con imagen opcional)
+- Middleware para comprobar la autoría al modificar/eliminar
+- Likes a comentarios
+- Buscar comentario por ID
+
+### 📚 Documentación
+
+Accede a la documentación completa de los endpoints con Swagger:
+http://localhost:3000/api-docs
 
 ---
 
 ## 📁 Estructura del proyecto
+
 ```
 .
-├── controllers/
-├── middlewares/
-├── models/
-├── routes/
 ├── config/
-├── .env
-├── .gitignore
+│   └── nodemailer.js
+├── controllers/
+│   ├── UserController.js
+│   ├── PostController.js
+│   └── CommentController.js
+├── docs/
+│   └── swagger.json
+├── middlewares/
+│   ├── authentication.js
+│   ├── isAuthor.js
+│   ├── isCommentAuthor.js
+│   └── upload.js
+├── models/
+│   ├── User.js
+│   ├── Post.js
+│   └── Comment.js
+├── routes/
+│   ├── users.js
+│   ├── posts.js
+│   └── comments.js
+├── uploads/
 ├── index.js
-├── package.json
+├── .env
+└── README.md
 ```
 
 ---
 
-## 🔐 Variables de entorno (.env)
-```
+## 🔐 Variables de entorno
+
+Crea un archivo `.env` con el siguiente contenido:
+
+```env
+MONGO_URI=mongodb+srv://...
+JWT_SECRET=tu_jwt_secret
+EMAIL_FROM=tu_correo@gmail.com
+EMAIL_PASS=contraseña_app_gmail
 PORT=3000
-MONGO_URI=mongodb+srv://<usuario>:<password>@cluster.mongodb.net/SocialMedia
-JWT_SECRET=bootcamp2025
 ```
-
-Estas variables se usan en `index.js` y `config/keys.js` mediante `dotenv`.
 
 ---
 
-## ✅ Instalación local
+## ✅ Puntos extra implementados
+
+- [x] Middleware `isAuthor` para editar/eliminar posts
+- [x] Middleware `isCommentAuthor` para comentarios
+- [x] Multer para imágenes en usuarios, posts y comentarios
+- [x] Confirmación de cuenta por correo
+- [x] Validación de login solo si se ha confirmado el correo
+- [x] Sistema de followers/following
+- [x] Endpoint `/users/info` con posts, número y lista de followers
+- [x] Likes a posts y comentarios
+- [x] Documentación completa con Swagger (`swagger.json`)
+- [x] Filtro por título (posts)
+- [x] Búsqueda por ID y nombre (usuarios)
+- [x] Paginación en posts
+
+---
+
+## 💻 Cómo ejecutar el proyecto
 
 ```bash
-git clone https://github.com/Elimila/2do-Proyecto-Backend.git
-cd 2do-Proyecto-Backend
+git clone https://github.com/tu_usuario/tu_repo.git
+cd tu_repo
 npm install
 npm run dev
-```
 
----
-
-## 🔧 Funcionalidades
-
-### Usuarios
-- Registro: `POST /users`
-- Login: `POST /users/login`
-- Logout: `DELETE /users/logout`
-- Info usuario: `GET /users/info`
-
-### Posts
-- Crear: `POST /posts`
-- Obtener todos: `GET /posts`
-- Buscar por título: `GET /posts/title/:title`
-- Buscar por ID: `GET /posts/id/:id`
-- Paginación: `GET /posts/paginated?page=1&limit=10`
-- Like/Unlike: `PUT /posts/like/:id`, `PUT /posts/unlike/:id`
-- Editar: `PUT /posts/:id` (requiere ser autor)
-- Eliminar: `DELETE /posts/:id` (requiere ser autor)
-
-### Comentarios
-- Crear comentario: `POST /comments/:postId`
-
----
-
-## 🔐 Autenticación
-- JWT se genera al hacer login y se guarda como token.
-- Middleware `authentication` para rutas protegidas.
-- Middleware `isAuthor` para verificar autoría de un post.
-
----
-
-## 🌍 Enlace en producción
-
-👉 [https://twodo-proyecto-backend.onrender.com](https://twodo-proyecto-backend.onrender.com)
-
----
-
-## 📦 Comandos importantes
-
-```bash
-npm init -y
-npm install express mongoose dotenv bcrypt jsonwebtoken
-npm install --save-dev nodemon
-```
-
----
-
-## 📁 .gitignore optimizado
-
-Incluye:
-- `node_modules/`
-- `.env` y derivados
-- logs, editor config, archivos del sistema como `.DS_Store`
-
----
 
 ## 🙋 Autora
 
-**Elida Rodriguez**  
-Bootcamp Desarrollo Web Fullstack  
+**Elida Rodriguez**
+Bootcamp Desarrollo Web Fullstack
 The Bridge
 
 
+```
