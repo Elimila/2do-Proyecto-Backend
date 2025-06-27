@@ -57,7 +57,7 @@ async register(req, res) {
 
     if (!user) return res.status(401).send({ message: 'Usuario no encontrado' })
 
-    // ✅ Verifica si el usuario confirmó su correo
+    // Verifica si el usuario confirmó su correo
     if (!user.confirmed) {
       return res.status(403).send({ message: 'Debes confirmar tu correo antes de iniciar sesión' })
     }
@@ -203,6 +203,24 @@ async updateAvatar(req, res) {
   } catch (error) {
     console.error('Error al confirmar el email:', error.message);
     res.status(500).send({ message: 'Error al confirmar el email' });
+  }
+},
+
+async getByName(req, res) {
+  try {
+    const name = req.params.name
+    const users = await User.find({
+      name: { $regex: name, $options: 'i' } // búsqueda insensible a mayúsculas
+    })
+
+    if (users.length === 0) {
+      return res.status(404).send({ message: 'No se encontraron usuarios con ese nombre' })
+    }
+
+    res.send(users)
+  } catch (error) {
+    console.error('Error al buscar usuarios por nombre:', error.message)
+    res.status(500).send({ message: 'Error al buscar usuarios' })
   }
 }
 

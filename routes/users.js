@@ -11,7 +11,9 @@ router.get('/info', authentication, UserController.getInfo)
 router.put('/avatar', authentication, upload.single('avatar'), UserController.updateAvatar)
 router.post('/follow/:id', authentication, UserController.follow)
 router.post('/unfollow/:id', authentication, UserController.unfollow)
-router.get('/confirm/:emailtoken', UserController.confirmEmail);
+router.get('/confirm/:emailtoken', UserController.confirmEmail)
+router.get('/search/:name', UserController.getByName)
+
 
 
 module.exports = router
