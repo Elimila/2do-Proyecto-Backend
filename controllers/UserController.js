@@ -92,17 +92,15 @@ async logout(req, res) {
 async getInfo(req, res) {
   try {
     const user = await User.findById(req.user._id)
-      .populate('followers', 'name email') // Muestra nombre y email de los seguidores
-      .lean(); // Convierte el documento Mongoose a objeto JavaScript
+      .populate('followers', 'name email') // Mostrar nombre y email
+      .lean(); // Convertir a objeto JS plano
 
     if (!user) {
       return res.status(404).send({ message: 'Usuario no encontrado' });
     }
 
-    // Contar seguidores
     const followerCount = user.followers.length;
 
-    // Obtener posts del usuario
     const posts = await Post.find({ author: req.user._id });
 
     res.send({
@@ -113,7 +111,8 @@ async getInfo(req, res) {
         age: user.age,
         role: user.role,
         avatar: user.avatar || null,
-        followerCount
+        followerCount,
+        followers: user.followers // Aquí se incluyen los nombres y emails
       },
       posts
     });
@@ -121,9 +120,9 @@ async getInfo(req, res) {
     console.error('Error al obtener info del usuario:', error.message);
     res.status(500).send({ message: 'Error al obtener la información' });
   }
-  },
+},
 
-  async updateAvatar(req, res) {
+async updateAvatar(req, res) {
     try {
       const avatar = req.file ? req.file.filename : null
       if (!avatar) return res.status(400).send({ message: 'No se subió ninguna imagen' })
