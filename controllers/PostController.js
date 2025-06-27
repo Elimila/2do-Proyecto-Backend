@@ -152,8 +152,27 @@ async delete(req, res) {
     console.error('Error al eliminar el post:', error.message)
     res.status(500).send({ message: 'Error al eliminar el post' })
   }
+},
+
+async getFull(req, res) {
+  try {
+    const posts = await Post.find()
+      .populate('author', 'name email')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          select: 'name email'
+        }
+      })
+
+    res.send(posts)
+  } catch (error) {
+    console.error('Error al obtener los posts completos:', error.message)
+    res.status(500).send({ message: 'Error al obtener los posts completos' })
+  }
+ }
 }
 
-}
 
 module.exports = PostController
